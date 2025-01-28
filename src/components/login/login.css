@@ -1,0 +1,46 @@
+/* Styling for the container */
+.login-container {
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #ffffff;
+    width: 40vw;
+    
+  }
+  
+  /* Styling for the form */
+  .login-form {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 30vw;
+    
+    
+  }
+  
+  /* Styling for the button */
+  .login-button {
+    background-color: #1976d2;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  .login-button:hover {
+    background-color: #115293;
+  }
+
+  .dialog .MuiDialog-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dialog .MuiPaper-root {
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  

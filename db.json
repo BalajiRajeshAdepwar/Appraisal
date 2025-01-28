@@ -1,0 +1,129 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "name": "Balaji",
+        "role": "employee",
+        "email": "balaji.a@gmail.com",
+        "password": "balaji123",
+        "goals": [
+          {
+            "goalId": 101,
+            "description": "Complete the React APP",
+            "status": "Submitted"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Neeraja",
+        "role": "employee",
+        "email": "neeraja.a@gmail.com",
+        "password": "neeraja123",
+        "goals": [
+          {
+            "goalId": 102,
+            "description": "Complete the Feedback APP",
+            "status": "Submitted"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Kratika",
+        "role": "employee",
+        "email": "kratika.a@gmail.com",
+        "password": "kratika123",
+        "goals": [
+          {
+            "goalId": 103,
+            "description": "Complete the Exam APP",
+            "status": "Submitted"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Mitesh",
+        "role": "employee",
+        "email": "mitesh.a@gmail.com",
+        "password": "mitesh123",
+        "goals": [
+          {
+            "goalId": 104,
+            "description": "Complete the fod APP",
+            "status": "Submitted"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "name": "Bala",
+        "role": "employee",
+        "email": "bala.a@gmail.com",
+        "password": "bala123",
+        "goals": [
+          {
+            "goalId": 105,
+            "description": "Complete the Adobe APP",
+            "status": "Submitted"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Amarnath",
+        "role": "employee",
+        "email": "amarnath.a@gmail.com",
+        "password": "amarnath123",
+        "goals": [
+          {
+            "goalId": 106,
+            "description": "Complete the Map APP",
+            "status": "Submitted"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "name": "Vijaya",
+        "role": "employee",
+        "email": "vijaya.a@gmail.com",
+        "password": "vijaya123",
+        "goals": [
+          {
+            "goalId": 107,
+            "description": "Complete the store APP",
+            "status": "Not Completed"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "name": "Anil ",
+        "role": "manager",
+        "email": "anil.l@example.com",
+        "password": "anil123",
+        "team": [1, 2, 3, 4, 5]
+      },
+      {
+        "id": 9,
+        "name": "Vijay ",
+        "role": "manager",
+        "email": "vijay.h@example.com",
+        "password": "vijay123",
+        "team": [6, 7, 8, 9, 10]
+      },
+      {
+        "id": 10,
+        "name": "abhilash",
+        "role": "admin",
+        "email": "abhilash.j@example.com",
+        "password": "abhilash@123"
+      }
+    ],
+    "appraisals": [
+
+    ]
+  }
+  
