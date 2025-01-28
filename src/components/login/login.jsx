@@ -30,6 +30,9 @@ function Login() {
         );
 
         if (user) {
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("role", user.role);
+
           if (user.role === "employee") {
             navigate("/employee-dashboard");
           } else if (user.role === "manager") {
@@ -47,7 +50,6 @@ function Login() {
   };
 
   const handleForgotPassword = () => {
-    // Mock backend call
     if (forgotEmail) {
       alert(`Password reset instructions sent to ${forgotEmail}`);
       setForgotPasswordDialogOpen(false);
@@ -105,7 +107,6 @@ function Login() {
         </Box>
       </Container>
 
-      {/* Forgot Password Dialog */}
       <Dialog
         open={forgotPasswordDialogOpen}
         onClose={() => setForgotPasswordDialogOpen(false)}

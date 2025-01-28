@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   Box,
@@ -11,57 +12,55 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress,
 } from "@mui/material";
 import "./dashboard.css";
 
 const EmployeeDashboard = () => {
-  const [appraisals] = useState([
+  const [appraisals, setAppraisals] = useState([
     {
-      goalTitle: "Complete Q1 sales target",
-      description: "Achieve $50,000 in sales.",
-      managerFeedback: "Excellent performance",
-      rating: 4.5,
+      goalTitle: "Complete Peject target",
+      description: "Performed and developed.",
+      managerFeedback: "Good performance",
+      rating: 4.0,
     },
   ]);
 
   const [goal, setGoal] = useState({ title: "", description: "", date: "" });
   const [selfAssessment, setSelfAssessment] = useState("");
-  const [progress, setProgress] = useState(false);
 
-  const handleGoalChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setGoal((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmitGoal = () => {
-    if (!goal.title || !goal.description || !goal.date) {
-      alert("All fields in Set Goals are required!");
+  const handleSubmitAll = () => {
+    if (!goal.title || !goal.description || !goal.date || !selfAssessment) {
+      alert("All fields are required!");
       return;
     }
-    alert("Goal submitted successfully!");
-    setGoal({ title: "", description: "", date: "" });
-  };
 
-  const handleSubmitAssessment = () => {
-    if (!selfAssessment) {
-      alert("Performance Summary is required!");
-      return;
-    }
-    setProgress(true); // Show progress indicator
-    setTimeout(() => {
-      alert("Self-Assessment submitted successfully!");
-      setProgress(false); // Hide progress indicator
-      setSelfAssessment("");
-    }, 2000);
+    const newAppraisal = {
+      goalTitle: goal.title,
+      description: goal.description,
+      managerFeedback: "Pending Review",
+      rating: "N/A",
+    };
+
+    setAppraisals((prevAppraisals) => [...prevAppraisals, newAppraisal]);
+
+    alert("Data submitted successfully to the reporting manager!");
+
+    // Reset the form
+    setGoal({ title: "", description: "", date: "" });
+    setSelfAssessment("");
   };
 
   return (
     <Box className="dashboard-container">
       <Typography className="dashboard-title">Employee Dashboard</Typography>
 
-      {/* Set Goals Section */}
-      <Box className="form-container">
+      {/* Form Section */}
+      <Box className="form-container" sx={{ "& > :not(style)": { m: 1 } }}>
         <Typography className="section-title">Set Goals</Typography>
         <TextField
           label="Goal Title"
@@ -69,7 +68,7 @@ const EmployeeDashboard = () => {
           fullWidth
           className="text-field"
           value={goal.title}
-          onChange={handleGoalChange}
+          onChange={handleInputChange}
           required
         />
         <TextField
@@ -80,7 +79,7 @@ const EmployeeDashboard = () => {
           fullWidth
           className="text-field"
           value={goal.description}
-          onChange={handleGoalChange}
+          onChange={handleInputChange}
           required
         />
         <TextField
@@ -90,24 +89,15 @@ const EmployeeDashboard = () => {
           fullWidth
           className="text-field"
           value={goal.date}
-          onChange={handleGoalChange}
+          onChange={handleInputChange}
           InputLabelProps={{
             shrink: true,
           }}
           required
         />
-        <Button
-          variant="contained"
-          color="primary"
-          className="submit-button"
-          onClick={handleSubmitGoal}
-        >
-          Submit Goal
-        </Button>
       </Box>
 
-      {/* Self-Assessment Section */}
-      <Box className="form-container">
+      <Box className="form-container" sx={{ "& > :not(style)": { m: 1 } }}>
         <Typography className="section-title">Self-Assessment</Typography>
         <TextField
           label="Performance Summary"
@@ -119,24 +109,20 @@ const EmployeeDashboard = () => {
           onChange={(e) => setSelfAssessment(e.target.value)}
           required
         />
-        <Button
-          variant="contained"
-          color="secondary"
-          className="submit-button"
-          onClick={handleSubmitAssessment}
-        >
-          Submit Assessment
-        </Button>
-        {progress && (
-          <Box className="alert-message">
-            <CircularProgress size={20} /> Submitting...
-          </Box>
-        )}
       </Box>
+
+      <Button
+        variant="contained"
+        color="primary"
+        className="submit-button"
+        onClick={handleSubmitAll}
+      >
+        Submit
+      </Button>
 
       {/* Appraisal History Section */}
       <Box>
-        <Typography className="section-title">Appraisal History</Typography>
+        <Typography className="section-title" sx={ { m: 3 }}>Appraisal History</Typography>
         <TableContainer component={Paper} className="table-container">
           <Table>
             <TableHead>
@@ -165,3 +151,9 @@ const EmployeeDashboard = () => {
 };
 
 export default EmployeeDashboard;
+
+
+
+
+
+
