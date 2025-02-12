@@ -1,58 +1,61 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import "./App.css";
+import { useEffect, useState, lazy, Suspense } from "react";
+import { Routes, Route, Navigate, BrowserRouter, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Login from "./components/login/login";
-import EmployeeDashboard from "./components/dashboards/employee/dashboard";
-import ManagerDashboard from "./components/dashboards/manager/dashboard";
-import AdminDashboard from "./components/dashboards/admin/dashboard";
+import NotFound from "./components/dashboards/notfound/Notfound";
 
-// eslint-disable-next-line react/prop-types
-const ProtectedRoute = ({children, role} ) => {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const userRole = localStorage.getItem("role");
 
-  if (!isLoggedIn) {
+// Lazy load the dashboards
+const Employee = lazy(() => import("./components/dashboards/employee/dashboard"));
+const Manager = lazy(() => import("./components/dashboards/manager/dashboard"));
+const Admin = lazy(() => import("./components/dashboards/admin/dashboard"));
+
+const App = () => {
+  const reduxUser = useSelector((state) => state.auth.user);
+  const [user, setUser] = useState(reduxUser || JSON.parse(localStorage.getItem("user")));
+  const location = useLocation(); 
+
+  useEffect(() => {
+    if (reduxUser) {
+      setUser(reduxUser);
+    } else {
+      localStorage.removeItem("user");
+      setUser(null);
+      window.location.replace("/");
+    }
+  }, [reduxUser]);
+
+  if (!user && location.pathname !== "/") {
     return <Navigate to="/" />;
   }
 
-  if (role && role !== userRole) {
-    return <Navigate to="/" />;
-  }
-
-  return children;
-};
-
-function App() {
   return (
-    <BrowserRouter>
+    <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
-          path="/employee-dashboard"
-          element={
-            <ProtectedRoute role="employee">
-              <EmployeeDashboard />
-            </ProtectedRoute>
-          }
+          path="/employee"
+          element={user?.role === "employee" ? <Employee user={user} /> : <Navigate to="/" />}
         />
         <Route
-          path="/manager-dashboard"
-          element={
-            <ProtectedRoute role="manager">
-              <ManagerDashboard />
-            </ProtectedRoute>
-          }
+          path="/manager"
+          element={user?.role === "manager" ? <Manager user={user} /> : <Navigate to="/" />}
         />
         <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute role="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
+          path="/admin"
+          element={user?.role === "admin" ? <Admin user={user} /> : <Navigate to="/" />}
         />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+          <Route path="*" element={<NotFound />} />
 
-export default App;
+      </Routes>
+    </Suspense>
+  );
+};
+
+const AppWrapper = () => (
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+
+export default AppWrapper;

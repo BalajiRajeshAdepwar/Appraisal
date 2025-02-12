@@ -1,159 +1,159 @@
 
-import { useState } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
-import "./dashboard.css";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { submitAppraisal, updateAppraisal, fetchAppraisals } from "../../redux/appraisalSlice";
+import { Box, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
+import PropTypes from "prop-types";
+import "./dashboard.css"; 
 
-const EmployeeDashboard = () => {
-  const [appraisals, setAppraisals] = useState([
-    {
-      goalTitle: "Complete Peject target",
-      description: "Performed and developed.",
-      managerFeedback: "Good performance",
-      rating: 4.0,
-    },
-  ]);
+const Employee = ({ user }) => {
+  const dispatch = useDispatch();
+  const appraisals = useSelector((state) => state.appraisals.data);
 
-  const [goal, setGoal] = useState({ title: "", description: "", date: "" });
-  const [selfAssessment, setSelfAssessment] = useState("");
+  const [newGoal, setNewGoal] = useState({ goalTitle: "", goalDescription: "", targetDate: "" });
+  const [editMode, setEditMode] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [actionType, setActionType] = useState("");
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setGoal((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    dispatch(fetchAppraisals("employee"));
+  }, [dispatch]);
+
+
+
+  const handleSubmit = () => {
+    setOpenModal(true);
+    setActionType(editMode ? "update" : "submit");
   };
 
-  const handleSubmitAll = () => {
-    if (!goal.title || !goal.description || !goal.date || !selfAssessment) {
-      alert("All fields are required!");
-      return;
+  const handleConfirm = () => {
+    if (actionType === "update") {
+      dispatch(updateAppraisal({ id: editMode, ...newGoal }));
+    } else {
+      dispatch(submitAppraisal({ 
+        employeeId: user.id, 
+        managerId: user.managerId, 
+        ...newGoal, 
+        status: "Pending", 
+        managerFeedback: "", 
+        rating: "" 
+      }));
     }
+    
+    setNewGoal({ goalTitle: "", goalDescription: "", targetDate: "" });
+    setEditMode(null);
+    setOpenModal(false);
+  };
+  
 
-    const newAppraisal = {
-      goalTitle: goal.title,
-      description: goal.description,
-      managerFeedback: "Pending Review",
-      rating: "N/A",
-    };
+  const userName = localStorage.getItem("userName");
 
-    setAppraisals((prevAppraisals) => [...prevAppraisals, newAppraisal]);
+  const handleClose = () => {
+    setOpenModal(false);
+  };
 
-    alert("Data submitted successfully to the reporting manager!");
-
-    // Reset the form
-    setGoal({ title: "", description: "", date: "" });
-    setSelfAssessment("");
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userName");
+    window.location.href = "/";
   };
 
   return (
     <Box className="dashboard-container">
-      <Typography className="dashboard-title">Employee Dashboard</Typography>
+      {/* Header */}
+      <header className="dashboard-header">
+        <Typography className="dashboard-title">Employee Dashboard</Typography>
+        <Typography className="user-name">Welcome, {userName}</Typography>
+        <Button variant="contained" color="secondary" className="logout" onClick={handleLogout}>
+          Logout
+        </Button>
+      </header>
 
       {/* Form Section */}
-      <Box className="form-container" sx={{ "& > :not(style)": { m: 1 } }}>
-        <Typography className="section-title">Set Goals</Typography>
-        <TextField
-          label="Goal Title"
-          name="title"
-          fullWidth
-          className="text-field"
-          value={goal.title}
-          onChange={handleInputChange}
-          required
-        />
-        <TextField
-          label="Description"
-          name="description"
-          multiline
-          rows={4}
-          fullWidth
-          className="text-field"
-          value={goal.description}
-          onChange={handleInputChange}
-          required
-        />
-        <TextField
-          label="Target Date"
-          type="date"
-          name="date"
-          fullWidth
-          className="text-field"
-          value={goal.date}
-          onChange={handleInputChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          required
-        />
-      </Box>
+      <Grid container spacing={2} className="form-container">
+        <Grid item xs={12}>
+          <Typography variant="h5">{editMode ? "Edit Goal" : "Submit New Goal"}</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField label="Goal Title" fullWidth margin="normal" value={newGoal.goalTitle} onChange={(e) => setNewGoal({ ...newGoal, goalTitle: e.target.value })} className="text-field" />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField label="Goal Description" fullWidth margin="normal" value={newGoal.goalDescription} onChange={(e) => setNewGoal({ ...newGoal, goalDescription: e.target.value })} className="text-field" />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField label="Target Date" type="date" fullWidth margin="normal" InputLabelProps={{ shrink: true }} value={newGoal.targetDate} onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })} className="text-field" />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Button variant="contained" color="primary" className="submit-button" fullWidth onClick={handleSubmit}>
+            {editMode ? "Update" : "Submit"}
+          </Button>
+        </Grid>
+      </Grid>
 
-      <Box className="form-container" sx={{ "& > :not(style)": { m: 1 } }}>
-        <Typography className="section-title">Self-Assessment</Typography>
-        <TextField
-          label="Performance Summary"
-          multiline
-          rows={4}
-          fullWidth
-          className="text-field"
-          value={selfAssessment}
-          onChange={(e) => setSelfAssessment(e.target.value)}
-          required
-        />
-      </Box>
-
-      <Button
-        variant="contained"
-        color="primary"
-        className="submit-button"
-        onClick={handleSubmitAll}
-      >
-        Submit
-      </Button>
-
-      {/* Appraisal History Section */}
-      <Box>
-        <Typography className="section-title" sx={ { m: 3 }}>Appraisal History</Typography>
+      {/* Appraisal History */}
+      <Box className="appraisal-history-container">
         <TableContainer component={Paper} className="table-container">
           <Table>
-            <TableHead>
-              <TableRow className="table-header">
+            <TableHead className="table-header">
+              <TableRow>
+                <TableCell>ID</TableCell>
                 <TableCell>Goal Title</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Manager Feedback</TableCell>
+                <TableCell>Goal Description</TableCell>
+                <TableCell>Target Date</TableCell>
+                <TableCell>Manager Review</TableCell>
+                <TableCell>Actions</TableCell>
                 <TableCell>Rating</TableCell>
+                
               </TableRow>
             </TableHead>
             <TableBody>
-              {appraisals.map((appraisal, index) => (
-                <TableRow key={index} className="table-row">
-                  <TableCell>{appraisal.goalTitle}</TableCell>
-                  <TableCell>{appraisal.description}</TableCell>
-                  <TableCell>{appraisal.managerFeedback}</TableCell>
-                  <TableCell>{appraisal.rating}</TableCell>
-                </TableRow>
+              {appraisals.map((a) => (
+                <TableRow key={a.id}>
+                <TableCell>{a.id}</TableCell>
+                <TableCell>{a.goalTitle}</TableCell>
+                <TableCell>{a.goalDescription}</TableCell>
+                <TableCell>{a.targetDate}</TableCell>
+                <TableCell>{a.managerFeedback || "Pending"}</TableCell>
+                <TableCell>{a.adminAction || "Pending"}</TableCell> {/* Show admin action here */}
+                <TableCell>{a.rating|| "Pending"}</TableCell> {/* Show rating here */}
+                <TableCell>
+                  {a.status === "Pending" && (
+                    <Button variant="outlined" onClick={() => { setEditMode(a.id); setNewGoal(a); }}>Edit</Button>
+                  )}
+                </TableCell>
+              </TableRow>              
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+
+      {/* Confirmation Modal */}
+      <Dialog open={openModal} onClose={handleClose}>
+        <DialogTitle>Confirm {actionType === "update" ? "Update" : "Submit"} Goal</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to {actionType === "update" ? "update" : "submit"} this goal?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">Cancel</Button>
+          <Button onClick={handleConfirm} color="primary">Confirm</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Footer */}
+      <footer className="dashboard-footer">
+        <Typography>© 2025 Appraisal System | All Rights Reserved</Typography>
+      </footer>
     </Box>
   );
 };
 
-export default EmployeeDashboard;
+Employee.propTypes = {
+  user: PropTypes.object.isRequired,
+};
 
-
-
-
-
+export default Employee;
 

@@ -1,46 +1,58 @@
-/* Styling for the container */
-.login-container {
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: #ffffff;
-    width: 40vw;
-    
-  }
-  
-  /* Styling for the form */
-  .login-form {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 30vw;
-    
-    
-  }
-  
-  /* Styling for the button */
-  .login-button {
-    background-color: #1976d2;
-    color: #ffffff;
-    font-weight: bold;
-  }
-  
-  .login-button:hover {
-    background-color: #115293;
-  }
+html, body {
 
-  .dialog .MuiDialog-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #ffffff;
+  width: 450px;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-button {
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+}
+
+.login-button:hover {
+  background-color: #115293;
+}
+
+.dialog .MuiDialog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog .MuiPaper-root {
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .login-container{
+    width: 400px;
   }
-  
-  .dialog .MuiPaper-root {
-    padding: 20px;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
+}
+
+@media (min-width: 320px) and (max-width: 575px) {
+  .login-container{
+    width: 250px;
+  }}
+
