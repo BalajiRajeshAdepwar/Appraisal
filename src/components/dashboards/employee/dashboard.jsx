@@ -1,27 +1,65 @@
-
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { submitAppraisal, updateAppraisal, fetchAppraisals } from "../../redux/appraisalSlice";
-import { Box, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
+import { Box, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import PropTypes from "prop-types";
-import "./dashboard.css"; 
+import "./dashboard.css";
+import Grid from '@mui/material/Grid';
+import { logout } from "../../redux/authSlice";
+
 
 const Employee = ({ user }) => {
   const dispatch = useDispatch();
   const appraisals = useSelector((state) => state.appraisals.data);
 
-  const [newGoal, setNewGoal] = useState({ goalTitle: "", goalDescription: "", targetDate: "" });
+  const [newGoal, setNewGoal] = useState({ 
+    goalTitle: "", 
+    goalDescription: "", 
+    targetDate: "", 
+    selfReview: "" 
+  });
   const [editMode, setEditMode] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [actionType, setActionType] = useState("");
+  const [errors, setErrors] = useState({ 
+    goalTitle: false, 
+    goalDescription: false, 
+    targetDate: false, 
+    selfReview: false 
+  });
+
+  const dispatchLogout = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
 
   useEffect(() => {
     dispatch(fetchAppraisals("employee"));
   }, [dispatch]);
 
-
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/"); // Redirect to login if not authenticated
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleSubmit = () => {
+    // Validate fields
+    const newErrors = {
+      goalTitle: !newGoal.goalTitle,
+      goalDescription: !newGoal.goalDescription,
+      targetDate: !newGoal.targetDate,
+      selfReview: !newGoal.selfReview,
+    };
+
+    setErrors(newErrors);
+
+    // If any field is empty, stop submission
+    if (newErrors.goalTitle || newErrors.goalDescription || newErrors.targetDate || newErrors.selfReview) {
+      return;
+    }
+
+    // If all fields are valid, open confirmation modal
     setOpenModal(true);
     setActionType(editMode ? "update" : "submit");
   };
@@ -30,21 +68,34 @@ const Employee = ({ user }) => {
     if (actionType === "update") {
       dispatch(updateAppraisal({ id: editMode, ...newGoal }));
     } else {
+      // Add submitted date to the payload
+      const submittedDate = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
       dispatch(submitAppraisal({ 
         employeeId: user.id, 
         managerId: user.managerId, 
         ...newGoal, 
         status: "Pending", 
         managerFeedback: "", 
-        rating: "" 
+        rating: "",
+        submittedDate // Include submitted date
       }));
     }
-    
-    setNewGoal({ goalTitle: "", goalDescription: "", targetDate: "" });
+
+    // Reset form and close modal
+    setNewGoal({ goalTitle: "", goalDescription: "", targetDate: "", selfReview: "" });
     setEditMode(null);
     setOpenModal(false);
   };
-  
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewGoal({ ...newGoal, [name]: value });
+
+    // Clear the error for the field being typed in
+    if (value.trim()) {
+      setErrors({ ...errors, [name]: false });
+    }
+  };
 
   const userName = localStorage.getItem("userName");
 
@@ -56,7 +107,7 @@ const Employee = ({ user }) => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("role");
     localStorage.removeItem("userName");
-    window.location.href = "/";
+    dispatchLogout(logout()); 
   };
 
   return (
@@ -76,13 +127,67 @@ const Employee = ({ user }) => {
           <Typography variant="h5">{editMode ? "Edit Goal" : "Submit New Goal"}</Typography>
         </Grid>
         <Grid item xs={12}>
-          <TextField label="Goal Title" fullWidth margin="normal" value={newGoal.goalTitle} onChange={(e) => setNewGoal({ ...newGoal, goalTitle: e.target.value })} className="text-field" />
+          <TextField
+            label="Goal Title"
+            fullWidth
+            margin="normal"
+            name="goalTitle"
+            value={newGoal.goalTitle}
+            onChange={handleInputChange}
+            className="text-field"
+            required
+            error={errors.goalTitle}
+            helperText={errors.goalTitle ? "This field is required" : ""}
+          />
         </Grid>
         <Grid item xs={12}>
-          <TextField label="Goal Description" fullWidth margin="normal" value={newGoal.goalDescription} onChange={(e) => setNewGoal({ ...newGoal, goalDescription: e.target.value })} className="text-field" />
+          <TextField
+            label="Goal Description"
+            fullWidth
+            margin="normal"
+            name="goalDescription"
+            value={newGoal.goalDescription}
+            onChange={handleInputChange}
+            className="text-field"
+            required
+            error={errors.goalDescription}
+            helperText={errors.goalDescription ? "This field is required" : ""}
+          />
         </Grid>
         <Grid item xs={12}>
-          <TextField label="Target Date" type="date" fullWidth margin="normal" InputLabelProps={{ shrink: true }} value={newGoal.targetDate} onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })} className="text-field" />
+          <TextField
+            label="Target Date"
+            type="date"
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+            name="targetDate"
+            value={newGoal.targetDate}
+            onChange={handleInputChange}
+            className="text-field"
+            required
+            error={errors.targetDate}
+            helperText={errors.targetDate ? "This field is required" : ""}
+            inputProps={{
+              min: new Date().toISOString().split("T")[0], // Set minimum selectable date to today
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Self Review"
+            fullWidth
+            margin="normal"
+            name="selfReview"
+            value={newGoal.selfReview}
+            onChange={handleInputChange}
+            className="text-field"
+            required
+            error={errors.selfReview}
+            helperText={errors.selfReview ? "This field is required" : ""}
+            multiline
+            rows={4}
+          />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Button variant="contained" color="primary" className="submit-button" fullWidth onClick={handleSubmit}>
@@ -100,29 +205,33 @@ const Employee = ({ user }) => {
                 <TableCell>ID</TableCell>
                 <TableCell>Goal Title</TableCell>
                 <TableCell>Goal Description</TableCell>
+                <TableCell>Submitted Date</TableCell>
                 <TableCell>Target Date</TableCell>
+                <TableCell>Self Review</TableCell>
                 <TableCell>Manager Review</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Admin Action</TableCell>
                 <TableCell>Rating</TableCell>
-                
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {appraisals.map((a) => (
                 <TableRow key={a.id}>
-                <TableCell>{a.id}</TableCell>
-                <TableCell>{a.goalTitle}</TableCell>
-                <TableCell>{a.goalDescription}</TableCell>
-                <TableCell>{a.targetDate}</TableCell>
-                <TableCell>{a.managerFeedback || "Pending"}</TableCell>
-                <TableCell>{a.adminAction || "Pending"}</TableCell> {/* Show admin action here */}
-                <TableCell>{a.rating|| "Pending"}</TableCell> {/* Show rating here */}
-                <TableCell>
-                  {a.status === "Pending" && (
-                    <Button variant="outlined" onClick={() => { setEditMode(a.id); setNewGoal(a); }}>Edit</Button>
-                  )}
-                </TableCell>
-              </TableRow>              
+                  <TableCell>{a.id}</TableCell>
+                  <TableCell>{a.goalTitle}</TableCell>
+                  <TableCell>{a.goalDescription}</TableCell>
+                  <TableCell>{a.submittedDate || "N/A"}</TableCell>
+                  <TableCell>{a.targetDate}</TableCell>
+                  <TableCell>{a.selfReview || "Pending"}</TableCell>
+                  <TableCell>{a.managerFeedback || "Pending"}</TableCell>
+                  <TableCell>{a.adminAction || "Pending"}</TableCell>
+                  <TableCell>{a.rating || "Pending"}</TableCell>
+                  <TableCell>
+                    {a.status === "Pending" && (
+                      <Button variant="outlined" onClick={() => { setEditMode(a.id); setNewGoal(a); }}>Edit</Button>
+                    )}
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
@@ -156,4 +265,3 @@ Employee.propTypes = {
 };
 
 export default Employee;
-

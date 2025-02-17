@@ -5,7 +5,7 @@
       "name": "Balaji",
       "role": "employee",
       "email": "balaji.a@gmail.com",
-      "password": "balaji123",
+      "password": "balaji234",
       "managerId": 3,
       "goals": [
         {
@@ -21,7 +21,7 @@
       "role": "employee",
       "email": "neeraja.a@gmail.com",
       "password": "neeraja123",
-      "managerId": 4,
+      "managerId": 3,
       "goals": [
         {
           "goalId": 102,
@@ -60,152 +60,45 @@
   ],
   "appraisals": [
     {
-      "id": "5963",
+      "id": "dc83",
       "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "updated one",
-      "goalDescription": "data",
+      "managerId": 3,
+      "goalTitle": "Generate app",
+      "goalDescription": "using 2 more data",
       "targetDate": "2025-02-28",
-      "status": "Finalized",
-      "managerFeedback": "good job finish the requirements",
-      "rating": "4",
-      "adminAction": "good job"
-    },
-    {
-      "id": "06b0",
-      "employeeId": "2",
-      "managerId": "4",
-      "goalTitle": "Expected Outcome: ",
-      "goalDescription": "Try this fix and check if finalRating appears in UI and db.json.",
-      "targetDate": "2025-02-19",
-      "status": "Finalized",
-      "managerFeedback": "good job",
-      "rating": "4.2",
-      "adminAction": "good job"
-    },
-    {
-      "id": "e507",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "React Native app",
-      "goalDescription": "With responsive and use library also",
-      "targetDate": "2025-02-28",
-      "status": "Finalized",
-      "managerFeedback": "good job finish the requirements",
-      "rating": "4",
-      "adminAction": "Nice"
-    },
-    {
-      "id": "2e86",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "React with Java",
-      "goalDescription": "Used spring boot for services",
-      "targetDate": "2025-02-28",
-      "status": "Finalized",
-      "managerFeedback": "good job",
-      "rating": "4",
-      "adminAction": "good job"
+      "selfReview": "Generated that app working fine and need to review",
+      "status": "Pending",
+      "managerFeedback": "",
+      "rating": "",
+      "submittedDate": "2025-02-14"
     }
   ],
   "finalizedApprovals": [
     {
-      "id": "5963",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "updated one",
-      "goalDescription": "data",
-      "targetDate": "2025-02-28",
-      "status": "Reviewed",
-      "managerFeedback": "good job finish the requirements",
-      "rating": ""
-    },
-    {
-      "id": "06b0",
+      "id": "0ff1",
       "employeeId": "2",
       "managerId": "4",
-      "goalTitle": "Expected Outcome: ",
-      "goalDescription": "Try this fix and check if finalRating appears in UI and db.json.",
-      "targetDate": "2025-02-19",
+      "goalTitle": "Backend service",
+      "goalDescription": "Developing with microservices and spring",
+      "targetDate": "2025-02-12",
       "status": "Reviewed",
-      "managerFeedback": "good job",
-      "rating": ""
-    },
-    {
-      "id": "e507",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "React Native app",
-      "goalDescription": "With responsive and use library also",
-      "targetDate": "2025-02-28",
-      "status": "Reviewed",
-      "managerFeedback": "good job finish the requirements",
-      "rating": ""
-    },
-    {
-      "id": "2e86",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "React with Java",
-      "goalDescription": "Used spring boot for services",
-      "targetDate": "2025-02-28",
-      "status": "Reviewed",
-      "managerFeedback": "good job",
+      "managerFeedback": "great inventions",
       "rating": ""
     }
   ],
   "adminHistory": [
     {
-      "id": "5963",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "updated one",
-      "goalDescription": "data",
-      "targetDate": "2025-02-28",
-      "status": "Finalized",
-      "managerFeedback": "good job finish the requirements",
-      "rating": "4",
-      "adminAction": "good job",
-      "employeeName": "Balaji"
-    },
-    {
-      "id": "06b0",
+      "id": "0ff1",
       "employeeId": "2",
       "managerId": "4",
-      "goalTitle": "Expected Outcome: ",
-      "goalDescription": "Try this fix and check if finalRating appears in UI and db.json.",
-      "targetDate": "2025-02-19",
+      "goalTitle": "Backend service",
+      "goalDescription": "Developing with microservices and spring",
+      "targetDate": "2025-02-12",
       "status": "Finalized",
-      "managerFeedback": "good job",
-      "rating": "4.2",
+      "managerFeedback": "great inventions",
+      "rating": "4",
       "adminAction": "good job",
       "employeeName": "Neeraja"
-    },
-    {
-      "id": "e507",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "React Native app",
-      "goalDescription": "With responsive and use library also",
-      "targetDate": "2025-02-28",
-      "status": "Finalized",
-      "managerFeedback": "good job finish the requirements",
-      "rating": "4",
-      "adminAction": "Nice",
-      "employeeName": "Balaji"
-    },
-    {
-      "id": "2e86",
-      "employeeId": "1",
-      "managerId": "3",
-      "goalTitle": "React with Java",
-      "goalDescription": "Used spring boot for services",
-      "targetDate": "2025-02-28",
-      "status": "Finalized",
-      "managerFeedback": "good job",
-      "rating": "4",
-      "adminAction": "good job",
-      "employeeName": "Balaji"
     }
   ]
 }

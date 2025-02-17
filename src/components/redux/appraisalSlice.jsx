@@ -3,7 +3,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5000";
 
-// ✅ Fetch Appraisals based on Role
 export const fetchAppraisals = createAsyncThunk(
   "appraisals/fetchAppraisals",
   async (role, { getState }) => {
@@ -24,7 +23,6 @@ export const fetchAppraisals = createAsyncThunk(
   }
 );
 
-// ✅ Submit a new appraisal
 export const submitAppraisal = createAsyncThunk(
   "appraisals/submitAppraisal",
   async (newGoal) => {
@@ -33,7 +31,6 @@ export const submitAppraisal = createAsyncThunk(
   }
 );
 
-// ✅ Update an appraisal (Employee Edit)
 export const updateAppraisal = createAsyncThunk(
   "appraisals/updateAppraisal",
   async ({ id, ...updates }) => {
@@ -76,10 +73,8 @@ export const finalizeAppraisal = createAsyncThunk(
       employeeId,
     };
 
-    // Save to `adminHistory` (so admins can see finalized records)
     await axios.post("http://localhost:5000/adminHistory", updatedAppraisal);
 
-    // Ensure employees can see it in history by keeping it in `appraisals`
     await axios.patch(`http://localhost:5000/appraisals/${id}`, {
       status: "Finalized",
       rating: rating,  

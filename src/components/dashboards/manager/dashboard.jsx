@@ -19,6 +19,9 @@ import {
   Paper,
 } from "@mui/material";
 import "./dashboard.css";
+import { logout } from "../../redux/authSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const Manager = () => {
   const dispatch = useDispatch();
@@ -32,6 +35,15 @@ const Manager = () => {
     dispatch(fetchManagerHistory());
   }, [dispatch]);
 
+  const dispatchLogout = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/"); // Redirect to login if not authenticated
+    }
+  }, [isLoggedIn, navigate]);
   const handleApprove = async (id, employeeName, employeeId) => {
     const managerFeedback = feedback[id] || "";
 
@@ -59,6 +71,7 @@ const Manager = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("role");
     localStorage.removeItem("userName");
+    dispatchLogout(logout()); 
     window.location.href = "/";
   };
 

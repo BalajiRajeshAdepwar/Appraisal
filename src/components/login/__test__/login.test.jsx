@@ -3,9 +3,9 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { describe, test, beforeEach, expect, vi } from "vitest";
 import configureStore from "redux-mock-store";
-import Login from "./login";
+import Login from "../login";
 import "@testing-library/jest-dom";
-1
+
 vi.mock("../redux/authSlice", () => ({
   loginUser: vi.fn(),
 }));
@@ -32,5 +32,7 @@ describe("Login Component", () => {
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Forgot Password?/i })).toBeInTheDocument();
+
   });
 });

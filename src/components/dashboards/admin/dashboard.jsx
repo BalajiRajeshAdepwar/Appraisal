@@ -15,6 +15,9 @@ import {
   Paper,
 } from "@mui/material";
 import "./dashboard.css";
+import { logout } from "../../redux/authSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -24,10 +27,20 @@ const Admin = () => {
   const [ratings, setRatings] = useState({});
   const [disabled, setDisabled] = useState({});
 
+  const dispatchLogout = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
   useEffect(() => {
     dispatch(fetchAppraisals("admin"));
     dispatch(fetchAdminHistory());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/"); // Redirect to login if not authenticated
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleFinalize = async (id, employeeName, employeeId) => {
     const rating = ratings[id] || "Pending";
@@ -50,6 +63,7 @@ const Admin = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("role");
     localStorage.removeItem("userName");
+    dispatchLogout(logout()); 
     window.location.href = "/";
   };
 

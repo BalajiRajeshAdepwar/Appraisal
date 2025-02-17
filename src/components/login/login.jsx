@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../redux/authSlice";
 import {
   TextField,
   Button,
@@ -9,46 +12,84 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../redux/authSlice";
 import "./login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [forgotPasswordDialogOpen, setForgotPasswordDialogOpen] = useState(false);
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const error = useSelector((state) => state.auth.error);
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      const role = localStorage.getItem("role");
+      navigate(`/${role}`);
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const result = await dispatch(loginUser({ email, password })).unwrap();
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("role", result.role);
-      localStorage.setItem("userName", result.name);
       navigate(`/${result.role}`);
     } catch (err) {
       console.error("Login failed:", err);
     }
   };
 
-  const handleForgotPassword = () => {
-    if (forgotEmail) {
-      alert(`Password reset instructions sent to ${forgotEmail}`);
+  // Handle Forgot Password: Verify Email
+  const handleForgotPassword = async () => {
+    const response = await fetch("http://localhost:5000/users");
+    const users = await response.json();
+    const user = users.find((u) => u.email === forgotEmail);
+
+    if (user) {
+      localStorage.setItem("resetEmail", forgotEmail);
       setForgotPasswordDialogOpen(false);
-      setForgotEmail("");
+      setResetDialogOpen(true);
     } else {
-      alert("Please enter a valid email");
+      alert("Email not found!");
+    }
+  };
+
+  // Handle Reset Password
+  const handleResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const email = localStorage.getItem("resetEmail");
+    const response = await fetch("http://localhost:5000/users");
+    const users = await response.json();
+    const user = users.find((u) => u.email === email);
+
+    if (user) {
+      await fetch(`http://localhost:5000/users/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: newPassword }),
+      });
+
+      alert("Password updated successfully!");
+      setResetDialogOpen(false);
+      localStorage.removeItem("resetEmail");
+    } else {
+      alert("Something went wrong. Try again!");
     }
   };
 
   return (
     <>
-      <h2 className="login-title" >Begin Your Appraisal</h2>
+      <h2 className="login-title">Begin Your Appraisal</h2>
       <Box className="login-container">
         <Typography variant="h5" align="center" gutterBottom>
           Login
@@ -108,6 +149,41 @@ const Login = () => {
           </Button>
           <Button onClick={handleForgotPassword} variant="contained" color="primary">
             Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)} className="dialog">
+        <DialogTitle>Reset Password</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="New Password"
+            type="password"
+            variant="outlined"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            margin="normal"
+            required
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setResetDialogOpen(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleResetPassword} variant="contained" color="primary">
+            Reset Password
           </Button>
         </DialogActions>
       </Dialog>

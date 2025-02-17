@@ -10,7 +10,7 @@ const NotFound = () => {
     <Container>
       <Box className="not-found-container">
         <Typography className="not-found-title">404</Typography>
-        <Typography className="not-found-subtitle">Page Not Found</Typography>
+        <Typography className="not-found-subtitle">...Page Not Found</Typography>
         <Typography className="not-found-text">
           The page you are looking for does not exist or has been moved.
         </Typography>

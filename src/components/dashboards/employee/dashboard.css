@@ -7,11 +7,6 @@
   min-height: 100vh;
 }
 
-.dashboard-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
 
 .form-container {
   background: #fff;
@@ -75,6 +70,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 1;
   right: 0;
 }
 .MuiDialog-paper {
