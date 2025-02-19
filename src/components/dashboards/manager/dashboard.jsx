@@ -22,7 +22,6 @@ import "./dashboard.css";
 import { logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 
-
 const Manager = () => {
   const dispatch = useDispatch();
   const appraisals = useSelector((state) => state.appraisals.data);
@@ -41,7 +40,7 @@ const Manager = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/"); // Redirect to login if not authenticated
+      navigate("/"); 
     }
   }, [isLoggedIn, navigate]);
   const handleApprove = async (id, employeeName, employeeId) => {
@@ -71,13 +70,12 @@ const Manager = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("role");
     localStorage.removeItem("userName");
-    dispatchLogout(logout()); 
+    dispatchLogout(logout());
     window.location.href = "/";
   };
 
   return (
     <Box className="dashboard-container">
-      {/* Header */}
       <header className="dashboard-header">
         <Typography className="dashboard-title">Manager Dashboard</Typography>
         <Typography className="user-name">Welcome, {userName}</Typography>
@@ -130,7 +128,7 @@ const Manager = () => {
         )}
       </Box>
 
-      <Box >
+      <Box>
         <Typography variant="h6" gutterBottom>
           Finalized Appraisals:
         </Typography>
@@ -168,7 +166,6 @@ const Manager = () => {
         )}
       </Box>
 
-      {/* Footer */}
       <footer className="dashboard-footer">
         <Typography>© 2025 Appraisal System</Typography>
       </footer>

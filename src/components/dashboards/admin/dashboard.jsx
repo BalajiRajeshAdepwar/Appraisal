@@ -38,7 +38,7 @@ const Admin = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/"); // Redirect to login if not authenticated
+      navigate("/"); 
     }
   }, [isLoggedIn, navigate]);
 
@@ -78,15 +78,14 @@ const Admin = () => {
         </Button>
       </header>
 
-      {/* Pending Appraisals Section */}
       <Box className="section">
         <Typography variant="h6" gutterBottom>
           Appraisals to Finalize:
         </Typography>
         {appraisals.length > 0 ? (
           appraisals
-            .filter((a) => a.status === "Reviewed") // Show only "Reviewed" appraisals
-            .filter((a) => !finalizedAppraisals.some((f) => f.id === a.id)) // Exclude finalized ones
+            .filter((a) => a.status === "Reviewed") 
+            .filter((a) => !finalizedAppraisals.some((f) => f.id === a.id)) 
             .map((a) => (
               <div key={a.id} className="appraisal-item">
                 <Typography>Employee: {a.employeeName} (ID: {a.employeeId})</Typography>
@@ -121,7 +120,6 @@ const Admin = () => {
         )}
       </Box>
 
-      {/* Finalized Appraisals Section */}
       <Box className="section">
         <Typography variant="h6" gutterBottom>
           Admin History:
@@ -158,7 +156,6 @@ const Admin = () => {
         )}
       </Box>
 
-      {/* Footer */}
       <footer className="dashboard-footer">
         <Typography>© 2025 Appraisal System</Typography>
       </footer>

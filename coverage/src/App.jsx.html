@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -124,7 +124,8 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -185,12 +186,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import { useEffect, useState, lazy, Suspense } from "react";</span></span></span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import { useEffect, useState, lazy, Suspense } from "react";</span></span></span>
 <span class="cstat-no" title="statement not covered" >import { Routes, Route, Navigate, BrowserRouter, useLocation } from "react-router-dom";</span>
 <span class="cstat-no" title="statement not covered" >import { useSelector } from "react-redux";</span>
 <span class="cstat-no" title="statement not covered" >import Login from "./components/login/login";</span>
 <span class="cstat-no" title="statement not covered" >import NotFound from "./components/dashboards/notfound/Notfound";</span>
-<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >// Lazy load the dashboards</span>
 <span class="cstat-no" title="statement not covered" >const Employee = lazy(() =&gt; import("./components/dashboards/employee/dashboard"));</span>
@@ -200,18 +201,22 @@
 <span class="cstat-no" title="statement not covered" >const App = () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  const reduxUser = useSelector((state) =&gt; state.auth.user);</span>
 <span class="cstat-no" title="statement not covered" >  const [user, setUser] = useState(reduxUser || JSON.parse(localStorage.getItem("user")));</span>
-<span class="cstat-no" title="statement not covered" >  const location = useLocation(); </span>
+<span class="cstat-no" title="statement not covered" >  const location = useLocation();</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (reduxUser) {</span>
 <span class="cstat-no" title="statement not covered" >      setUser(reduxUser);</span>
 <span class="cstat-no" title="statement not covered" >    } else {</span>
+<span class="cstat-no" title="statement not covered" >      // Clear local storage if no user is found</span>
 <span class="cstat-no" title="statement not covered" >      localStorage.removeItem("user");</span>
+<span class="cstat-no" title="statement not covered" >      localStorage.removeItem("isLoggedIn");</span>
+<span class="cstat-no" title="statement not covered" >      localStorage.removeItem("role");</span>
+<span class="cstat-no" title="statement not covered" >      localStorage.removeItem("userName");</span>
 <span class="cstat-no" title="statement not covered" >      setUser(null);</span>
-<span class="cstat-no" title="statement not covered" >      window.location.replace("/");</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  }, [reduxUser]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  // Redirect to login if user is not authenticated</span>
 <span class="cstat-no" title="statement not covered" >  if (!user &amp;&amp; location.pathname !== "/") {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;Navigate to="/" /&gt;;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
@@ -232,8 +237,7 @@
 <span class="cstat-no" title="statement not covered" >          path="/admin"</span>
 <span class="cstat-no" title="statement not covered" >          element={user?.role === "admin" ? &lt;Admin user={user} /&gt; : &lt;Navigate to="/" /&gt;}</span>
 <span class="cstat-no" title="statement not covered" >        /&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;</span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/Routes&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/Suspense&gt;</span>
 <span class="cstat-no" title="statement not covered" >  );</span>
@@ -245,15 +249,14 @@
 <span class="cstat-no" title="statement not covered" >  &lt;/BrowserRouter&gt;</span>
 <span class="cstat-no" title="statement not covered" >);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >export default AppWrapper;</span>
-&nbsp;</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >export default AppWrapper;</span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-13T08:32:18.000Z
+                at 2025-02-18T13:13:13.698Z
             </div>
         <script src="../prettify.js"></script>
         <script>

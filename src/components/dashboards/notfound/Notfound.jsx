@@ -1,7 +1,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Typography, Container } from "@mui/material";
-import "./notfound.css"; // Import external CSS
+import "./notfound.css";
 
 const NotFound = () => {
   const navigate = useNavigate();

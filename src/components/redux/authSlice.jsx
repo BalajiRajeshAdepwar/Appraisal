@@ -9,9 +9,9 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (credentials, 
     if (!user) throw new Error("Invalid credentials");
 
     localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("isLoggedIn", "true"); // Add isLoggedIn flag
-    localStorage.setItem("role", user.role); // Add role
-    localStorage.setItem("userName", user.name); // Add userName
+    localStorage.setItem("isLoggedIn", "true"); 
+    localStorage.setItem("role", user.role);
+    localStorage.setItem("userName", user.name); 
 
     return user;
   } catch (error) {
@@ -23,12 +23,16 @@ const authSlice = createSlice({
   name: "auth",
   initialState: { user: JSON.parse(localStorage.getItem("user")) || null, error: null },
   reducers: {
+    login(state, action) {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    },
     logout: (state) => {
       state.user = null;
       localStorage.removeItem("user");
-      localStorage.removeItem("isLoggedIn"); // Remove isLoggedIn flag
-      localStorage.removeItem("role"); // Remove role
-      localStorage.removeItem("userName"); // Remove userName
+      localStorage.removeItem("isLoggedIn"); 
+      localStorage.removeItem("role"); 
+      localStorage.removeItem("userName"); 
     },
   },
   extraReducers: (builder) => {
@@ -43,5 +47,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, login} = authSlice.actions;
 export default authSlice.reducer;

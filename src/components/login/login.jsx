@@ -20,7 +20,8 @@ const Login = () => {
   const [forgotEmail, setForgotEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [forgotPasswordDialogOpen, setForgotPasswordDialogOpen] = useState(false);
+  const [forgotPasswordDialogOpen, setForgotPasswordDialogOpen] =
+    useState(false);
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,7 +46,6 @@ const Login = () => {
     }
   };
 
-  // Handle Forgot Password: Verify Email
   const handleForgotPassword = async () => {
     const response = await fetch("http://localhost:5000/users");
     const users = await response.json();
@@ -94,7 +94,11 @@ const Login = () => {
         <Typography variant="h5" align="center" gutterBottom>
           Login
         </Typography>
-        {error && <Typography color="error" align="center">{error}</Typography>}
+        {error && (
+          <Typography color="error" align="center">
+            {error}
+          </Typography>
+        )}
         <Box component="form" onSubmit={handleLogin} className="login-form">
           <TextField
             fullWidth
@@ -116,17 +120,31 @@ const Login = () => {
             margin="normal"
             required
           />
-          <Button type="submit" fullWidth variant="contained" color="primary" className="login-button">
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className="login-button"
+          >
             Login
           </Button>
-          <Button fullWidth variant="text" color="secondary" onClick={() => setForgotPasswordDialogOpen(true)}>
+          <Button
+            fullWidth
+            variant="text"
+            color="secondary"
+            onClick={() => setForgotPasswordDialogOpen(true)}
+          >
             Forgot Password?
           </Button>
         </Box>
       </Box>
 
-      {/* Forgot Password Dialog */}
-      <Dialog open={forgotPasswordDialogOpen} onClose={() => setForgotPasswordDialogOpen(false)} className="dialog">
+      <Dialog
+        open={forgotPasswordDialogOpen}
+        onClose={() => setForgotPasswordDialogOpen(false)}
+        className="dialog"
+      >
         <DialogTitle>Forgot Password</DialogTitle>
         <DialogContent>
           <Typography variant="body1" gutterBottom>
@@ -144,17 +162,27 @@ const Login = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setForgotPasswordDialogOpen(false)} color="secondary">
+          <Button
+            onClick={() => setForgotPasswordDialogOpen(false)}
+            color="secondary"
+          >
             Cancel
           </Button>
-          <Button onClick={handleForgotPassword} variant="contained" color="primary">
+          <Button
+            onClick={handleForgotPassword}
+            variant="contained"
+            color="primary"
+          >
             Submit
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Reset Password Dialog */}
-      <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)} className="dialog">
+      <Dialog
+        open={resetDialogOpen}
+        onClose={() => setResetDialogOpen(false)}
+        className="dialog"
+      >
         <DialogTitle>Reset Password</DialogTitle>
         <DialogContent>
           <TextField
@@ -182,7 +210,11 @@ const Login = () => {
           <Button onClick={() => setResetDialogOpen(false)} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleResetPassword} variant="contained" color="primary">
+          <Button
+            onClick={handleResetPassword}
+            variant="contained"
+            color="primary"
+          >
             Reset Password
           </Button>
         </DialogActions>

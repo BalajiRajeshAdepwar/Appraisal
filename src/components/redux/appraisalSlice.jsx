@@ -136,7 +136,17 @@ const appraisalSlice = createSlice({
     finalizedApprovals: [],
     adminHistory: [],
   },
-  reducers: {},
+  reducers: {
+    addAppraisal(state, action) {
+      state.data.push(action.payload);
+    },
+    updateAppraisalAction(state, action) {  
+      const { id, updates } = action.payload;
+      state.data = state.data.map((goal) =>
+        goal.id === id ? { ...goal, ...updates } : goal
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAppraisals.fulfilled, (state, action) => {
@@ -156,14 +166,16 @@ const appraisalSlice = createSlice({
         state.data.push(action.payload);
       })
       .addCase(updateAppraisal.fulfilled, (state, action) => {
-        const { id, updates } = action.payload;
+        const { id, updates } = action.payload; 
         state.data = state.data.map((goal) =>
-          goal.id === id ? { ...goal, ...updates } : goal
+          goal.id === id ? { ...goal, ...updates } : goal  
         );
       })
       .addCase(approveAppraisal.fulfilled, (state, action) => {
         state.data = state.data.map((appraisal) =>
-          appraisal.id === action.payload.id ? { ...appraisal, ...action.payload } : appraisal
+          appraisal.id === action.payload.id
+            ? { ...appraisal, status: "Reviewed", ...action.payload }
+            : appraisal
         );
         state.finalizedApprovals.push(action.payload);
       })
@@ -173,5 +185,8 @@ const appraisalSlice = createSlice({
       });
   },
 });
+
+export const { addAppraisal, updateAppraisalAction } = appraisalSlice.actions;
+
 
 export default appraisalSlice.reducer;

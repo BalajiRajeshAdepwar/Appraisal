@@ -5,7 +5,7 @@ import { submitAppraisal, updateAppraisal, fetchAppraisals } from "../../redux/a
 import { Box, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import PropTypes from "prop-types";
 import "./dashboard.css";
-import Grid from '@mui/material/Grid';
+import {Grid} from '@mui/material/Grid';
 import { logout } from "../../redux/authSlice";
 
 
@@ -39,12 +39,11 @@ const Employee = ({ user }) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/"); // Redirect to login if not authenticated
+      navigate("/"); 
     }
   }, [isLoggedIn, navigate]);
 
   const handleSubmit = () => {
-    // Validate fields
     const newErrors = {
       goalTitle: !newGoal.goalTitle,
       goalDescription: !newGoal.goalDescription,
@@ -54,12 +53,10 @@ const Employee = ({ user }) => {
 
     setErrors(newErrors);
 
-    // If any field is empty, stop submission
     if (newErrors.goalTitle || newErrors.goalDescription || newErrors.targetDate || newErrors.selfReview) {
       return;
     }
 
-    // If all fields are valid, open confirmation modal
     setOpenModal(true);
     setActionType(editMode ? "update" : "submit");
   };
@@ -68,7 +65,6 @@ const Employee = ({ user }) => {
     if (actionType === "update") {
       dispatch(updateAppraisal({ id: editMode, ...newGoal }));
     } else {
-      // Add submitted date to the payload
       const submittedDate = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
       dispatch(submitAppraisal({ 
         employeeId: user.id, 
@@ -77,11 +73,10 @@ const Employee = ({ user }) => {
         status: "Pending", 
         managerFeedback: "", 
         rating: "",
-        submittedDate // Include submitted date
+        submittedDate 
       }));
     }
 
-    // Reset form and close modal
     setNewGoal({ goalTitle: "", goalDescription: "", targetDate: "", selfReview: "" });
     setEditMode(null);
     setOpenModal(false);
@@ -91,7 +86,6 @@ const Employee = ({ user }) => {
     const { name, value } = e.target;
     setNewGoal({ ...newGoal, [name]: value });
 
-    // Clear the error for the field being typed in
     if (value.trim()) {
       setErrors({ ...errors, [name]: false });
     }
@@ -112,7 +106,6 @@ const Employee = ({ user }) => {
 
   return (
     <Box className="dashboard-container">
-      {/* Header */}
       <header className="dashboard-header">
         <Typography className="dashboard-title">Employee Dashboard</Typography>
         <Typography className="user-name">Welcome, {userName}</Typography>
@@ -121,7 +114,6 @@ const Employee = ({ user }) => {
         </Button>
       </header>
 
-      {/* Form Section */}
       <Grid container spacing={2} className="form-container">
         <Grid item xs={12}>
           <Typography variant="h5">{editMode ? "Edit Goal" : "Submit New Goal"}</Typography>
@@ -169,7 +161,7 @@ const Employee = ({ user }) => {
             error={errors.targetDate}
             helperText={errors.targetDate ? "This field is required" : ""}
             inputProps={{
-              min: new Date().toISOString().split("T")[0], // Set minimum selectable date to today
+              min: new Date().toISOString().split("T")[0], 
             }}
           />
         </Grid>
@@ -196,7 +188,6 @@ const Employee = ({ user }) => {
         </Grid>
       </Grid>
 
-      {/* Appraisal History */}
       <Box className="appraisal-history-container">
         <TableContainer component={Paper} className="table-container">
           <Table>
@@ -238,7 +229,6 @@ const Employee = ({ user }) => {
         </TableContainer>
       </Box>
 
-      {/* Confirmation Modal */}
       <Dialog open={openModal} onClose={handleClose}>
         <DialogTitle>Confirm {actionType === "update" ? "Update" : "Submit"} Goal</DialogTitle>
         <DialogContent>
@@ -252,7 +242,6 @@ const Employee = ({ user }) => {
         </DialogActions>
       </Dialog>
 
-      {/* Footer */}
       <footer className="dashboard-footer">
         <Typography>© 2025 Appraisal System | All Rights Reserved</Typography>
       </footer>

@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import Login from "./components/login/login";
 import NotFound from "./components/dashboards/notfound/Notfound";
 
-// Lazy load the dashboards
 const Employee = lazy(() => import("./components/dashboards/employee/dashboard"));
 const Manager = lazy(() => import("./components/dashboards/manager/dashboard"));
 const Admin = lazy(() => import("./components/dashboards/admin/dashboard"));
@@ -18,7 +17,6 @@ const App = () => {
     if (reduxUser) {
       setUser(reduxUser);
     } else {
-      // Clear local storage if no user is found
       localStorage.removeItem("user");
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("role");
@@ -27,7 +25,6 @@ const App = () => {
     }
   }, [reduxUser]);
 
-  // Redirect to login if user is not authenticated
   if (!user && location.pathname !== "/") {
     return <Navigate to="/" />;
   }

@@ -21,7 +21,7 @@
       "role": "employee",
       "email": "neeraja.a@gmail.com",
       "password": "neeraja123",
-      "managerId": 3,
+      "managerId": 4,
       "goals": [
         {
           "goalId": 102,
@@ -60,44 +60,49 @@
   ],
   "appraisals": [
     {
-      "id": "dc83",
-      "employeeId": "1",
-      "managerId": 3,
-      "goalTitle": "Generate app",
-      "goalDescription": "using 2 more data",
+      "id": "a84e",
+      "employeeId": "2",
+      "managerId": "3",
+      "goalTitle": "React reviews project",
+      "goalDescription": "add test cases as well",
       "targetDate": "2025-02-28",
-      "selfReview": "Generated that app working fine and need to review",
-      "status": "Pending",
-      "managerFeedback": "",
-      "rating": "",
-      "submittedDate": "2025-02-14"
+      "selfReview": "work is going to done making progress",
+      "status": "Finalized",
+      "managerFeedback": "good work need to update packages",
+      "rating": "3.6",
+      "submittedDate": "2025-02-19",
+      "adminAction": "good"
     }
   ],
   "finalizedApprovals": [
     {
-      "id": "0ff1",
+      "id": "a84e",
       "employeeId": "2",
-      "managerId": "4",
-      "goalTitle": "Backend service",
-      "goalDescription": "Developing with microservices and spring",
-      "targetDate": "2025-02-12",
+      "managerId": "3",
+      "goalTitle": "React reviews project",
+      "goalDescription": "add test cases as well",
+      "targetDate": "2025-02-28",
+      "selfReview": "work is going to done making progress",
       "status": "Reviewed",
-      "managerFeedback": "great inventions",
-      "rating": ""
+      "managerFeedback": "good work need to update packages",
+      "rating": "",
+      "submittedDate": "2025-02-19"
     }
   ],
   "adminHistory": [
     {
-      "id": "0ff1",
+      "id": "a84e",
       "employeeId": "2",
-      "managerId": "4",
-      "goalTitle": "Backend service",
-      "goalDescription": "Developing with microservices and spring",
-      "targetDate": "2025-02-12",
+      "managerId": "3",
+      "goalTitle": "React reviews project",
+      "goalDescription": "add test cases as well",
+      "targetDate": "2025-02-28",
+      "selfReview": "work is going to done making progress",
       "status": "Finalized",
-      "managerFeedback": "great inventions",
-      "rating": "4",
-      "adminAction": "good job",
+      "managerFeedback": "good work need to update packages",
+      "rating": "3.6",
+      "submittedDate": "2025-02-19",
+      "adminAction": "good",
       "employeeName": "Neeraja"
     }
   ]
