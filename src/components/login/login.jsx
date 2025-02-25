@@ -28,7 +28,6 @@ const Login = () => {
   const error = useSelector((state) => state.auth.error);
   const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-  // Redirect if already logged in
   useEffect(() => {
     if (isLoggedIn) {
       const role = localStorage.getItem("role");
@@ -60,7 +59,6 @@ const Login = () => {
     }
   };
 
-  // Handle Reset Password
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match!");

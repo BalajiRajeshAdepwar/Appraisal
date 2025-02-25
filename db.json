@@ -72,6 +72,21 @@
       "rating": "3.6",
       "submittedDate": "2025-02-19",
       "adminAction": "good"
+    },
+    {
+      "id": "9ebd",
+      "employeeId": "1",
+      "managerId": "3",
+      "goalTitle": "React reviews projectttttttttttttttttt",
+      "goalDescription": "add test cases as well and workkkkkkkkkkkkkkkkkkkk",
+      "targetDate": "2025-02-28",
+      "selfReview": "data updatedddddddddddd",
+      "status": "Finalized",
+      "managerFeedback": "good work",
+      "rating": "4",
+      "submittedDate": "2025-02-24",
+      "employeeName": "Balaji",
+      "adminAction": "good work"
     }
   ],
   "finalizedApprovals": [
@@ -87,6 +102,20 @@
       "managerFeedback": "good work need to update packages",
       "rating": "",
       "submittedDate": "2025-02-19"
+    },
+    {
+      "id": "9ebd",
+      "employeeId": "1",
+      "managerId": "3",
+      "goalTitle": "React reviews projectttttttttttttttttt",
+      "goalDescription": "add test cases as well and workkkkkkkkkkkkkkkkkkkk",
+      "targetDate": "2025-02-28",
+      "selfReview": "data updatedddddddddddd",
+      "status": "Reviewed",
+      "managerFeedback": "good work",
+      "rating": "",
+      "submittedDate": "2025-02-24",
+      "employeeName": "Balaji"
     }
   ],
   "adminHistory": [
@@ -104,6 +133,21 @@
       "submittedDate": "2025-02-19",
       "adminAction": "good",
       "employeeName": "Neeraja"
+    },
+    {
+      "id": "9ebd",
+      "employeeId": "1",
+      "managerId": "3",
+      "goalTitle": "React reviews projectttttttttttttttttt",
+      "goalDescription": "add test cases as well and workkkkkkkkkkkkkkkkkkkk",
+      "targetDate": "2025-02-28",
+      "selfReview": "data updatedddddddddddd",
+      "status": "Finalized",
+      "managerFeedback": "good work",
+      "rating": "4",
+      "submittedDate": "2025-02-24",
+      "employeeName": "Balaji",
+      "adminAction": "good work"
     }
   ]
 }

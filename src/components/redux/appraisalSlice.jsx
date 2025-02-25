@@ -34,26 +34,37 @@ export const submitAppraisal = createAsyncThunk(
 export const updateAppraisal = createAsyncThunk(
   "appraisals/updateAppraisal",
   async ({ id, ...updates }) => {
-    await axios.patch(`${API_URL}/appraisals/${id}`, updates);
-    return { id, updates };
+    const { data: appraisal } = await axios.get(`${API_URL}/appraisals/${id}`);
+
+    const updatedAppraisal = {
+      ...appraisal,
+      ...updates,
+      status: "Pending", 
+    };
+
+    await axios.patch(`${API_URL}/appraisals/${id}`, updatedAppraisal);
+    return { id, updates: updatedAppraisal };
   }
 );
 
 export const approveAppraisal = createAsyncThunk(
   "appraisals/approveAppraisal",
-  async ({ id, feedback }, { getState }) => {
+  async ({ id, feedback, status }, { getState }) => {
     const { data: appraisal } = await axios.get(`${API_URL}/appraisals/${id}`);
     const managerId = getState().auth.user.id;
 
     const updatedAppraisal = {
       ...appraisal,
-      status: "Reviewed",
+      status: status === "approve" ? "Reviewed" : "Modify", 
       managerFeedback: feedback,
       managerId,
     };
 
     await axios.patch(`${API_URL}/appraisals/${id}`, updatedAppraisal);
-    await axios.post(`${API_URL}/finalizedApprovals`, updatedAppraisal);
+
+    if (status === "approve") {
+      await axios.post(`${API_URL}/finalizedApprovals`, updatedAppraisal);
+    }
 
     return updatedAppraisal;
   }
@@ -62,25 +73,24 @@ export const approveAppraisal = createAsyncThunk(
 export const finalizeAppraisal = createAsyncThunk(
   "appraisals/finalizeAppraisal",
   async ({ id, rating, adminAction, employeeName, employeeId }) => {
-    const { data: appraisal } = await axios.get(`http://localhost:5000/appraisals/${id}`);
+    const { data: appraisal } = await axios.get(`${API_URL}/appraisals/${id}`);
 
     const updatedAppraisal = {
       ...appraisal,
       status: "Finalized",
       rating,
       adminAction,
-      employeeName, 
+      employeeName,
       employeeId,
     };
 
-    await axios.post("http://localhost:5000/adminHistory", updatedAppraisal);
-
-    await axios.patch(`http://localhost:5000/appraisals/${id}`, {
+    await axios.post(`${API_URL}/adminHistory`, updatedAppraisal);
+    await axios.patch(`${API_URL}/appraisals/${id}`, {
       status: "Finalized",
-      rating: rating,  
-      adminAction: adminAction  
+      rating,
+      adminAction,
     });
-    
+
     return updatedAppraisal;
   }
 );
@@ -106,7 +116,7 @@ export const fetchEmployeeHistory = createAsyncThunk(
 export const fetchAdminHistory = createAsyncThunk(
   "appraisals/fetchAdminHistory",
   async () => {
-    const { data } = await axios.get("http://localhost:5000/adminHistory");
+    const { data } = await axios.get(`${API_URL}adminHistory`);
     return data;
   }
 );
@@ -166,7 +176,7 @@ const appraisalSlice = createSlice({
         state.data.push(action.payload);
       })
       .addCase(updateAppraisal.fulfilled, (state, action) => {
-        const { id, updates } = action.payload; 
+        const { id, updates } = action.payload;  
         state.data = state.data.map((goal) =>
           goal.id === id ? { ...goal, ...updates } : goal  
         );

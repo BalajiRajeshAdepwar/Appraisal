@@ -1,4 +1,4 @@
-import { loginUser, logout } from "../authSlice"; // Adjust the path if needed
+import { loginUser, logout } from "../authSlice"; 
 import authReducer from "../authSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import axios from "axios";

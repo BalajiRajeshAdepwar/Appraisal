@@ -2,7 +2,6 @@ import appraisalReducer, {
     fetchAppraisals,
     submitAppraisal,
     updateAppraisal,
-    // approveAppraisal,
     finalizeAppraisal,
     fetchEmployeeHistory,
     fetchManagerHistory,
@@ -41,7 +40,7 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
     });
   
     test("should fetch appraisals for an employee", async () => {
-      const mockAppraisals = [{ id: 1, employeeId: 100, title: "Goal 1" }];
+      const mockAppraisals = [{ id: 1, employeeId: 100, title: "Goal Data" }];
       const mockUsers = [{ id: 100, name: "John Doe" }];
       mockAxios.onGet(`${API_URL}/appraisals?employeeId=100`).reply(200, mockAppraisals);
       mockAxios.onGet(`${API_URL}/users`).reply(200, mockUsers);
@@ -51,7 +50,7 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
   
       await store.dispatch(fetchAppraisals("employee"));
   
-      expect(store.getState().data).toEqual([{ id: 1, employeeId: 100, title: "Goal 1", employeeName: "John Doe" }]);
+      expect(store.getState().data).toEqual([{ id: 1, employeeId: 100, title: "Goal Data", employeeName: "John Doe" }]);
     });
   
     test("should submit a new appraisal", async () => {
@@ -63,38 +62,35 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
       expect(store.getState().data).toContainEqual(newGoal);
     });
   
-    test("should update an appraisal", async () => {
-        const updatedData = { id: 1, updates: { title: "Updated Goal" } };
-        mockAxios.onPatch(`${API_URL}/appraisals/1`).reply(200, updatedData); 
+    
+    test("should fetch admin history", async () => {
+      const mockAdminHistory = [
+        { id: 8, employeeId: 900, title: "Reviewed Appraisal", status: "Finalized" },
+      ];
+    
+      mockAxios.onGet(`${API_URL}adminHistory`).reply(200, mockAdminHistory);
+    
+      await store.dispatch(fetchAdminHistory());
+    
+      expect(store.getState().adminHistory).toEqual(expect.arrayContaining(mockAdminHistory));
+    });
+
+      test("should update an appraisal", async () => {
+        const updatedData = { id: 1, title: "Updated Goal" }; 
+        mockAxios.onGet(`${API_URL}/appraisals/1`).reply(200, { id: 1, title: "Old Goal" });
+        mockAxios.onPatch(`${API_URL}/appraisals/1`).reply(200, updatedData);
       
-        const initialState = { data: [{ id: 1, title: "Old Goal" }] };  
+        const initialState = { data: [{ id: 1, title: "Old Goal" }] };
         const store = configureStore({ reducer: appraisalReducer, preloadedState: initialState });
       
         await store.dispatch(updateAppraisal(updatedData));
-        expect(store.getState().data).toEqual(expect.arrayContaining([expect.objectContaining(updatedData)]));
+      
+        expect(store.getState().data).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ id: 1, title: "Updated Goal" }), 
+          ])
+        );
       });
-
-//       test("should approve an appraisal", async () => {
-//   const mockAppraisal = { id: 3, employeeId: 200, title: "Appraisal 3", status: "Pending" };
-//   mockAxios.onGet(`${API_URL}/appraisals/3`).reply(200, mockAppraisal);
-//   mockAxios.onPatch(`${API_URL}/appraisals/3`).reply(200);
-//   mockAxios.onPost(`${API_URL}/finalizedApprovals`).reply(200);
-
-//   const initialState = { 
-//     data: [{ id: 3, title: "Appraisal 3", status: "Pending" }], 
-//     finalizedApprovals: [] 
-//   };
-//   const store = configureStore({ reducer: appraisalReducer, preloadedState: initialState });
-
-//   await store.dispatch(approveAppraisal({ id: 3, feedback: "Well done" }));
-
-//   // Ensure that the appraisal status has been updated to "Reviewed"
-//   expect(store.getState().data).toEqual(expect.arrayContaining([
-//     expect.objectContaining({ id: 3, status: "Reviewed" }) // Status should be 'Reviewed'
-//   ]));
-//   expect(store.getState().finalizedApprovals).toContainEqual(expect.objectContaining({ id: 3, status: "Reviewed" }));
-// });
-
       
     test("should finalize an appraisal", async () => {
       const mockAppraisal = { id: 4, employeeId: 300, title: "Appraisal 4", status: "Reviewed" };
@@ -153,12 +149,6 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
           ])
         );
       });      
-  
-    test("should fetch admin history", async () => {
-      const mockAdminHistory = [{ id: 7, title: "Admin Finalized", status: "Finalized" }];
-      mockAxios.onGet(`${API_URL}/adminHistory`).reply(200, mockAdminHistory);
-      await store.dispatch(fetchAdminHistory());
-      expect(store.getState().adminHistory).toEqual(mockAdminHistory);
-    });
+
   });
   

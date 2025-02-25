@@ -1,10 +1,9 @@
 
-import store from "../store"; // Import the store
+import store from "../store";
 import { login } from "../authSlice";
 import { addAppraisal, updateAppraisalAction } from "../appraisalSlice";
 import { expect, test, describe, beforeEach } from "vitest";
 
-// Wrap the tests in a describe block for better structure
 describe("Redux store actions", () => {
   let dispatch;
 
@@ -16,7 +15,6 @@ describe("Redux store actions", () => {
     const userData = { id: 1, name: "balaji" };
     dispatch(login(userData));
 
-    // Check if auth state is updated correctly
     const authState = store.getState().auth;
     expect(authState.user).toEqual(userData);
     expect(authState.isAuthenticated).toBe(true);
@@ -26,7 +24,6 @@ describe("Redux store actions", () => {
     const newAppraisal = { id: 1, title: "Goal 1", status: "Pending" };
     dispatch(addAppraisal(newAppraisal));
 
-    // Check if appraisal state is updated correctly
     const appraisalState = store.getState().appraisals.data;
     expect(appraisalState).toContainEqual(newAppraisal);
   });

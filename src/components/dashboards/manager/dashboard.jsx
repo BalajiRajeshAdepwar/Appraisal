@@ -43,28 +43,50 @@ const Manager = () => {
       navigate("/"); 
     }
   }, [isLoggedIn, navigate]);
-  const handleApprove = async (id, employeeName, employeeId) => {
+  const handleModify = async (id, employeeName, employeeId) => {
     const managerFeedback = feedback[id] || "";
-
+  
     await dispatch(
       approveAppraisal({
         id,
         feedback: managerFeedback,
+        status: "modify", 
         employeeName,
         employeeId,
       })
     );
-
+  
     setDisabled((prev) => ({ ...prev, [id]: true }));
-
     dispatch(fetchAppraisals("manager"));
     dispatch(fetchManagerHistory());
-
+  
     setTimeout(() => {
       setDisabled((prev) => ({ ...prev, [id]: false }));
     }, 2000);
   };
-
+  
+  const handleApprove = async (id, employeeName, employeeId) => {
+    const managerFeedback = feedback[id] || "";
+  
+    await dispatch(
+      approveAppraisal({
+        id,
+        feedback: managerFeedback,
+        status: "approve", 
+        employeeName,
+        employeeId,
+      })
+    );
+  
+    setDisabled((prev) => ({ ...prev, [id]: true }));
+    dispatch(fetchAppraisals("manager"));
+    dispatch(fetchManagerHistory());
+  
+    setTimeout(() => {
+      setDisabled((prev) => ({ ...prev, [id]: false }));
+    }, 2000);
+  };
+  
   const userName = localStorage.getItem("userName");
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -111,6 +133,16 @@ const Manager = () => {
                   setFeedback({ ...feedback, [a.id]: e.target.value })
                 }
               />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  handleModify(a.id, a.employeeName, a.employeeId)
+                }
+                disabled={disabled[a.id] || !feedback[a.id]}
+              >
+                Modify
+              </Button>
               <Button
                 variant="contained"
                 color="primary"

@@ -5,7 +5,7 @@ import { submitAppraisal, updateAppraisal, fetchAppraisals } from "../../redux/a
 import { Box, Typography, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import PropTypes from "prop-types";
 import "./dashboard.css";
-import {Grid} from '@mui/material/Grid';
+import Grid from '@mui/material/Grid';
 import { logout } from "../../redux/authSlice";
 
 
@@ -218,7 +218,7 @@ const Employee = ({ user }) => {
                   <TableCell>{a.adminAction || "Pending"}</TableCell>
                   <TableCell>{a.rating || "Pending"}</TableCell>
                   <TableCell>
-                    {a.status === "Pending" && (
+                    {(a.status === "Pending" || a.status === "Modify")  && (
                       <Button variant="outlined" onClick={() => { setEditMode(a.id); setNewGoal(a); }}>Edit</Button>
                     )}
                   </TableCell>

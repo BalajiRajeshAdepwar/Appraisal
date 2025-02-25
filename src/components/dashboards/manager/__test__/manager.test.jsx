@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { describe, test, beforeEach, expect, vi } from "vitest";
 import configureStore from "redux-mock-store";
-import Manager from "../dashboard"; // Import your manager component
+import Manager from "../dashboard"; 
 import "@testing-library/jest-dom";
 import { thunk } from "redux-thunk";
 
@@ -27,8 +27,18 @@ describe("Manager Component", () => {
   beforeEach(() => {
     store = mockStore({
       appraisals: {
-        data: [], // Initial empty state for data
-        history: [], // Initial empty state for history
+        data: [], 
+        history: [], 
+        pending: [
+          {
+            id: "1",
+            title: "Goal 1",
+            description: "Improve coding skills",
+            targetDate: "2025-02-25",
+            employee: "John Doe",
+            feedback: "",
+          },
+        ],
       },
     });
     store.dispatch = vi.fn();
@@ -69,9 +79,7 @@ describe("Manager Component", () => {
     });
   
     renderWithProviders(<Manager />, { store });
-  
-    // Wait for the component to render and ensure the goal title is shown
-    await waitFor(() => expect(screen.getByText(/Goal Data/i)).toBeInTheDocument());
+      await waitFor(() => expect(screen.getByText(/Goal Data/i)).toBeInTheDocument());
   });
   
 
